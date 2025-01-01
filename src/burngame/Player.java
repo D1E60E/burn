@@ -65,7 +65,6 @@ public class Player {
         // Calculate the center of the image for rotation
         int centerX = x + img.getWidth(null) / 2;
         int centerY = y + img.getHeight(null) / 2;
-        System.out.println(centerX+","+centerY);
 
         // Save the current transform
         AffineTransform oldTransform = g2d.getTransform();

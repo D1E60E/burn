@@ -3,6 +3,7 @@ package burngame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -49,6 +50,18 @@ public class Enemy {
         // Convert the enemy's world position to screen position
         int screenX = worldX - Main.worldX;
         int screenY = worldY - Main.worldY;
+        int playerX = 960;  
+        int playerY = 540;
+        
+        for (Wall wall : Main.walls) {
+            Line2D lineofsight = new Line2D.Double(playerX, playerY, screenX, screenY);
+            g.drawLine(playerX, playerY, screenX, screenY);
+            // Get the wall's bounds in absolute world coordinates
+            Rectangle bounds = wall.getBounds(wall.x - Main.worldX, wall.y - Main.worldY);
+            if(lineofsight.intersects(bounds)){
+                System.out.println("balls");
+            }
+        }   
 
         // Draw the enemy image
         g.drawImage(enemyImage, screenX - enemyImage.getWidth(null) / 2,
