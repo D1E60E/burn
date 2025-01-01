@@ -30,7 +30,7 @@ public class Player {
             new Weapon("Assault Rifle", 10, 10, true, "src/burngame/icons/spark.png")
         };
         currentWeapon = weapons[weaponIndex];
-        
+
     }
     public void switchWeapon(int direction) {
         weaponIndex = (weaponIndex + direction + weapons.length) % weapons.length;
@@ -57,12 +57,15 @@ public class Player {
         angle = Math.atan2(mouseY - (y + img.getHeight(null) / 2), mouseX - (x + img.getWidth(null) / 2)) +1.57;
     }
     public void draw(Graphics g) {
+              x -= img.getWidth(null)/2;
+        y -= img.getHeight(null)/2;
         updateDirection(Main.mouseX,Main.mouseY);
         Graphics2D g2d = (Graphics2D) g;
         
         // Calculate the center of the image for rotation
         int centerX = x + img.getWidth(null) / 2;
         int centerY = y + img.getHeight(null) / 2;
+        System.out.println(centerX+","+centerY);
 
         // Save the current transform
         AffineTransform oldTransform = g2d.getTransform();

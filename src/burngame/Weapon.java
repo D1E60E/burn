@@ -18,6 +18,7 @@ public class Weapon {
     private int fireRate; // Bullets per second
     private boolean automatic; // True for automatic weapons (AR), false for semi-automatic (Pistol)
     private Image sparkImage;
+
     
 
     private long lastShotTime = 0;
