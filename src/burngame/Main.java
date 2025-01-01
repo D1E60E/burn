@@ -17,7 +17,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author shafr
+ * @author Adam Shafronsky
  */
 public class Main extends javax.swing.JFrame {
     
