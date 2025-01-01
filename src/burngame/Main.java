@@ -228,7 +228,7 @@ addWall(1553,1829,1,407,true);
     int playerHeight = carter.img.getHeight(null);
 
     // Adjust the player's bounds for world movement
-    Rectangle playerBounds = new Rectangle(1920/2, 1080/2, playerWidth, playerHeight);
+    Rectangle playerBounds = new Rectangle(960-carter.img.getWidth(null)/2, 540-carter.img.getHeight(null)/2, playerWidth, playerHeight);
 
     // Now check collisions with walls
     for (Wall wall : walls) {
