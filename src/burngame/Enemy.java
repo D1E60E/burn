@@ -52,14 +52,13 @@ public class Enemy {
         int screenY = worldY - Main.worldY;
         int playerX = 960;  
         int playerY = 540;
-        
-        for (Wall wall : Main.walls) {
-            Line2D lineofsight = new Line2D.Double(playerX, playerY, screenX, screenY);
+         Line2D lineofsight = new Line2D.Double(playerX, playerY, screenX, screenY);
             g.drawLine(playerX, playerY, screenX, screenY);
+        for (Wall wall : Main.walls) {
             // Get the wall's bounds in absolute world coordinates
             Rectangle bounds = wall.getBounds(wall.x - Main.worldX, wall.y - Main.worldY);
             if(lineofsight.intersects(bounds)){
-                System.out.println("balls");
+             //   System.out.println("balls");
             }
         }   
 

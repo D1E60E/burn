@@ -79,12 +79,13 @@ public void shoot(int mouseX, int mouseY) {
 
     // Check ray against each wall
     for (Wall wall : Main.walls) {
+        if (wall.hardwall){
         // Get the wall's bounds in absolute world coordinates
         Rectangle bounds = wall.getBounds(wall.x, wall.y);
 
         // Get intersection point with the ray
         Point2D intersection = getRayWallIntersection(startX + Main.worldX, startY + Main.worldY, directionX, directionY, bounds);
-
+        
         if (intersection != null) {
             // Calculate distance to the intersection point
             double distance = intersection.distance(startX + Main.worldX, startY + Main.worldY);
@@ -96,6 +97,7 @@ public void shoot(int mouseX, int mouseY) {
                 sparkY = (int) intersection.getY();
             }
         }
+             }
     }
 
     // If there was a valid intersection, create a spark at that position
@@ -114,7 +116,10 @@ private Point2D getRayWallIntersection(double startX, double startY, double dirX
         new Line2D.Double(wall.x, wall.y + wall.height, wall.x + wall.width, wall.y + wall.height) // Bottom edge
     };
 
-    // Check each edge for intersection
+    // Track the closest intersection
+    Point2D closestIntersection = null;
+    double closestDistance = Double.MAX_VALUE;
+
     for (Line2D edge : edges) {
         Point2D intersection = getLineIntersection(
             startX, startY,
@@ -123,11 +128,20 @@ private Point2D getRayWallIntersection(double startX, double startY, double dirX
         );
 
         if (intersection != null) {
-            return intersection; // Return the first intersection point found
+            // Calculate distance to the intersection point
+            double distance = intersection.distance(startX, startY);
+
+            // Update the closest intersection
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIntersection = intersection;
+            }
         }
     }
-    return null; // No intersection with this wall
+
+    return closestIntersection; // Return the closest intersection
 }
+
 
 private Point2D getLineIntersection(double x1, double y1, double x2, double y2,
                                     double x3, double y3, double x4, double y4) {

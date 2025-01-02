@@ -4,9 +4,9 @@ package burngame;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class Main extends javax.swing.JFrame {
     
     //DEVELOPER VARIABLES
     private boolean showWalls = false; // Toggle visibility of walls for testing
-    private boolean editMode = false; //Toggle edit mode for world building
+    private boolean editMode = true; //Toggle edit mode for world building
     
     
     
@@ -169,48 +169,28 @@ public class Main extends javax.swing.JFrame {
      
      
      
-     //LIST OF WALLS, ADD ANY WALLS OVER HERE (x,y,width,height,is it hard wall?)
+     //LIST OF WALLS, ADD ANY WALLS OVER HERE (x,y,width,height,is it hard wall?)Please use the wall maker to auto generate the wall
      private void initWalls(){
-         addWall(1047,2236,503,1,true);
-addWall(1046,1807,1,429,true);
-addWall(12,1806,1030,1,true);
-addWall(11,1536,1,270,true);
-addWall(11,1536,1034,1,true);
-addWall(1046,1266,1,270,true);
-addWall(11,1265,1036,1,true);
-addWall(11,11,1,1255,true);//THIS WALL
-addWall(86,91,304,1,true);
-addWall(390,91,1,191,true);
-addWall(86,282,305,1,true);
-addWall(85,90,1,193,true);
-addWall(12,10,2226,1,true);
-addWall(491,14,1,726,true);
-addWall(492,740,13,1,true);
-addWall(503,13,1,729,true);
-addWall(489,873,15,1,true);
-addWall(504,874,1,391,true);
-addWall(491,1264,13,1,true);
-addWall(491,873,1,391,true);
-addWall(1124,275,811,1,true);
-addWall(1935,275,1,264,true);
-addWall(1126,538,809,1,true);
-addWall(1125,274,1,264,true);
-addWall(2237,11,1,622,true);
-addWall(2053,630,184,1,true);
-addWall(2053,630,1,191,true);
-addWall(2053,821,185,1,true);
-addWall(2235,821,1,121,true);
-addWall(2025,939,210,1,true);
-addWall(2026,941,1,219,true);
-addWall(2026,1160,211,1,true);
-addWall(2236,1160,1,283,true);
-addWall(1894,1440,344,1,true);
-addWall(1895,1441,1,118,true);
-addWall(1896,1559,352,1,true);
-addWall(2248,1559,1,270,true);
-addWall(1555,1829,695,1,true);
-addWall(1553,1829,1,407,true);
-
+addWall(1126,275,808,265,true);
+addWall(1048,2235,503,15,true);
+addWall(1552,1827,698,422,true);
+addWall(-1,1805,1048,445,true);
+addWall(-1,1538,14,267,true);
+addWall(-1,1265,1048,275,true);
+addWall(0,1,14,1262,true);
+addWall(14,1,2236,14,true);
+addWall(2237,15,13,1426,true);
+addWall(1895,1441,356,119,true);
+addWall(2245,1560,4,268,true);
+addWall(2025,941,211,221,true);
+addWall(2052,631,182,191,true);
+addWall(489,873,15,391,true);
+addWall(489,1,15,740,true);
+addWall(85,91,305,191,true);
+addWall(-2,1238,15,32,true);
+ addWall(1611,153,260,120,false);
+addWall(544,1144,261,121,false);
+addWall(2029,1562,223,266,false);        
      }
      private void initEnemies(){
          addEnemy(800,500,"AR");
@@ -222,29 +202,49 @@ addWall(1553,1829,1,407,true);
          enemies.add(new Enemy(x,y,("src/burngame/icons/"+image+".png")));
      }
      
-     //check for player collisions
-      private boolean checkCollision(int nextX, int nextY) {
-    int playerWidth = carter.img.getWidth(null);
-    int playerHeight = carter.img.getHeight(null);
+     
 
-    // Adjust the player's bounds for world movement
-    Rectangle playerBounds = new Rectangle(960-carter.img.getWidth(null)/2, 540-carter.img.getHeight(null)/2, playerWidth, playerHeight);
 
-    // Now check collisions with walls
+
+//check for player collisions
+ public void resolveCollisions(Player player) {
+    Rectangle2D playerHitbox = player.getRotatedHitbox();
+    
     for (Wall wall : walls) {
-        // Adjust wall bounds for world movement
-        if (playerBounds.intersects(wall.getBounds(wall.x-nextX,wall.y-nextY))) {
-            return true; // Collision detected
+        Rectangle2D wallBounds = wall.getBounds(wall.x - Main.worldX, wall.y - Main.worldY);
+        
+        if (playerHitbox.intersects(wallBounds)) {
+            double disX, disY;
             
+            // Horizontal collision
+            if (playerHitbox.getCenterX() < wallBounds.getCenterX()) {
+                disX = wallBounds.getMinX() - playerHitbox.getMaxX();
+            } else {
+                disX = wallBounds.getMaxX() - playerHitbox.getMinX();
+            }
+            
+            // Vertical collision
+            if (playerHitbox.getCenterY() < wallBounds.getCenterY()) {
+                disY = wallBounds.getMinY() - playerHitbox.getMaxY();
+            } else {
+                disY = wallBounds.getMaxY() - playerHitbox.getMinY();
+            }
+            
+            // Apply the smaller push-out value
+            if (Math.abs(disX) < Math.abs(disY)) {
+                Main.worldX += disX;
+            } else {
+                Main.worldY += disY;
+            }
         }
     }
-    return false; // No collision
 }
+
       
       
       
       
-   private void updatePlayerPosition() {
+  public void updatePlayerPosition() {
     int nextX = worldX;
     int nextY = worldY;
 
@@ -253,12 +253,14 @@ addWall(1553,1829,1,407,true);
     if (pressedKeys.contains(KeyEvent.VK_S)) nextY += carter.speed;
     if (pressedKeys.contains(KeyEvent.VK_D)) nextX += carter.speed;
 
-    // Check for collisions before updating the world
-    if (!checkCollision(nextX, nextY)) {
-        worldX = nextX;
-        worldY = nextY;
-    }
+    // Temporarily update the position
+    worldX = nextX;
+    worldY = nextY;
+
+    // Resolve any collisions
+    resolveCollisions(carter);
 }
+
     
    private void printMethod(int x1, int x2, int y1, int y2) {
     // Calculate the differences between the coordinates
@@ -273,13 +275,7 @@ addWall(1553,1829,1,407,true);
     if (y2 < y1) {
         y1 = y2;
     }
-
-    // If the wall is more horizontal (xdiff > ydiff), draw a horizontal wall
-    if (xdiff > ydiff) {
-        System.out.println("addWall(" + x1 + "," + y1 + "," + xdiff + ",1,true);");
-    } else { // If the wall is more vertical (ydiff > xdiff), draw a vertical wall
-        System.out.println("addWall(" + x1 + "," + y1 + ",1," + ydiff + ",true);");
-    }
+        System.out.println("addWall(" + x1 + "," + y1 + "," + xdiff + ","+ydiff+",true);");
 }
     
     
