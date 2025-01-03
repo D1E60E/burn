@@ -29,8 +29,8 @@ public class Main extends javax.swing.JFrame {
     private boolean isShooting = false;
     public static int mouseX = 0;
     public static int mouseY = 0;
-    public static int worldX = 0;
-    public static int worldY = 0;
+    public static int worldX;
+    public static int worldY;
     private Image crosshair;
     private Image testBackground;
     private Image pistolImg;
@@ -70,6 +70,8 @@ public class Main extends javax.swing.JFrame {
         Cursor blankCursor = toolkit.createCustomCursor(toolkit.getImage(""), new java.awt.Point(0, 0), "blank cursor");
         this.setCursor(blankCursor); 
         if (editMode) this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)); //this is for easier wall building, do not use for game
+        worldX += 350;
+        worldY +=1600;
     }
         @SuppressWarnings("unchecked")
         
@@ -190,7 +192,8 @@ addWall(85,91,305,191,true);
 addWall(-2,1238,15,32,true);
  addWall(1611,153,260,120,false);
 addWall(544,1144,261,121,false);
-addWall(2029,1562,223,266,false);        
+addWall(2029,1562,223,266,false);    
+addWall(503,1145,39,118,false);
      }
      private void initEnemies(){
          addEnemy(800,500,"AR");
@@ -245,18 +248,10 @@ addWall(2029,1562,223,266,false);
       
       
   public void updatePlayerPosition() {
-    int nextX = worldX;
-    int nextY = worldY;
-
-    if (pressedKeys.contains(KeyEvent.VK_W)) nextY -= carter.speed;
-    if (pressedKeys.contains(KeyEvent.VK_A)) nextX -= carter.speed;
-    if (pressedKeys.contains(KeyEvent.VK_S)) nextY += carter.speed;
-    if (pressedKeys.contains(KeyEvent.VK_D)) nextX += carter.speed;
-
-    // Temporarily update the position
-    worldX = nextX;
-    worldY = nextY;
-
+    if (pressedKeys.contains(KeyEvent.VK_W)) worldY -= carter.speed;
+    if (pressedKeys.contains(KeyEvent.VK_A)) worldX -= carter.speed;
+    if (pressedKeys.contains(KeyEvent.VK_S)) worldY += carter.speed;
+    if (pressedKeys.contains(KeyEvent.VK_D)) worldX += carter.speed;
     // Resolve any collisions
     resolveCollisions(carter);
 }
@@ -275,7 +270,7 @@ addWall(2029,1562,223,266,false);
     if (y2 < y1) {
         y1 = y2;
     }
-        System.out.println("addWall(" + x1 + "," + y1 + "," + xdiff + ","+ydiff+",true);");
+        System.out.println("addWall(" + x1 + "," + y1 + "," + xdiff + ","+ydiff+",false);");
 }
     
     
