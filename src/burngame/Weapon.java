@@ -26,12 +26,12 @@ public class Weapon {
     public Weapon(String name) {
         this.name = name;
         if (name.equals("Pistol")){
-        this.damage = 10;
-        this.fireRate = 5;
-        this.automatic = false;
-        this.clip = 2000000000;
+            this.damage = 10;
+            this.fireRate = 5;
+            this.automatic = false;
+            this.clip = -1;
         }else if (name.equals("Assault Rifle")){
-             this.damage = 10;
+            this.damage = 10;
             this.fireRate = 10;
             this.automatic = true;
             this.clip = 30;
@@ -44,28 +44,28 @@ public class Weapon {
     }
 
     public boolean canShoot() {
-        if (clip<=0){
+        if (clip == 0){
             reloading = true;
             clip = 30;
             return false;     
         }
         long currentTime = System.currentTimeMillis();
         if (reloading){
-         if (currentTime - lastShotTime >= 3500){
-             reloading = false;
-             return true;
-         }else{
-             return false;
-         }
+            if(currentTime - lastShotTime >= 3500){
+                reloading = false;
+                lastShotTime = currentTime;
+                return true;
+            }else{
+                return false;
+            }
         }else{
-        if (currentTime - lastShotTime >= 1000 / fireRate) {
-            lastShotTime = currentTime;
-            return true;
-        }
-        return false;
+            if (currentTime - lastShotTime >= 1000 / fireRate) {
+                lastShotTime = currentTime;
+                return true;
+            }
+            return false;
         }
     }
-  
     
     public String getName() {
         return name;
@@ -74,13 +74,16 @@ public class Weapon {
    
    public boolean isAutomatic() {
     return automatic;
-}
+   }
+   
+   public int getcount(){
+       return clip;
+   }
     
     
 public void shoot(int x, int y, int startX, int startY, boolean enemy) {
     if (!canShoot()) return;
     clip--;
-    System.out.println(clip);
     // Adjust position to world coordinates
     int adjustedX = x + Main.worldX;
     int adjustedY = y + Main.worldY;

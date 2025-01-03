@@ -60,7 +60,7 @@ public class Enemy {
             // Get the wall's bounds in absolute world coordinates
             Rectangle bounds = wall.getBounds(wall.x - Main.worldX, wall.y - Main.worldY);
             if(lineofsight.intersects(bounds)){
-             //   System.out.println("balls");
+             //System.out.println("balls");
             }
         }   
 

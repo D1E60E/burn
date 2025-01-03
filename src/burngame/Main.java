@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
@@ -46,8 +47,8 @@ public class Main extends javax.swing.JFrame {
     
     
     //DEVELOPER VARIABLES
-    private boolean showWalls = true; // Toggle visibility of walls for testing
-    private boolean editMode = false; //Toggle edit mode for world building
+    private boolean showWalls = false; // Toggle visibility of walls for testing
+    private boolean editMode = true; //Toggle edit mode for world building
     
     
     
@@ -90,6 +91,7 @@ public class Main extends javax.swing.JFrame {
             }
 
         };
+        ammocount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,15 +131,25 @@ public class Main extends javax.swing.JFrame {
         panDraw.setFocusable(true);
         panDraw.requestFocusInWindow();
 
+        ammocount.setFont(new java.awt.Font("Liberation Serif", 3, 48)); // NOI18N
+        ammocount.setForeground(new java.awt.Color(255, 0, 0));
+        ammocount.setText("jLabel1");
+
         javax.swing.GroupLayout panDrawLayout = new javax.swing.GroupLayout(panDraw);
         panDraw.setLayout(panDrawLayout);
         panDrawLayout.setHorizontalGroup(
             panDrawLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1920, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panDrawLayout.createSequentialGroup()
+                .addContainerGap(1678, Short.MAX_VALUE)
+                .addComponent(ammocount, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(167, 167, 167))
         );
         panDrawLayout.setVerticalGroup(
             panDrawLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1080, Short.MAX_VALUE)
+            .addGroup(panDrawLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(ammocount)
+                .addContainerGap(1000, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,9 +175,15 @@ public class Main extends javax.swing.JFrame {
         // Game loop updates player movement every 16 ms (~60 FPS)
         gameLoop = new Timer(16, e -> {
             updatePlayerPosition();
+            int count = carter.getAmmo();
+            if(carter.getWeaponName().equals("Assault Rifle")){
+                    ammocount.setText(String.valueOf(count));
+            }else{
+                ammocount.setText("∞");
+            }
             panDraw.repaint();
             if (isShooting && carter.getCurrentWeapon().isAutomatic()) {
-            carter.shoot();
+                carter.shoot();
             }
             
             
@@ -194,7 +212,7 @@ public class Main extends javax.swing.JFrame {
         addWall(489,1,15,740,true);
         addWall(85,91,305,191,true);
         addWall(-2,1238,15,32,true);
-         addWall(1611,153,260,120,false);
+        addWall(1611,153,260,120,false);
         addWall(544,1144,261,121,false);
         addWall(2029,1562,223,266,false);    
         addWall(503,1145,39,118,false);
@@ -323,13 +341,13 @@ public class Main extends javax.swing.JFrame {
 
     private void panDrawMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panDrawMousePressed
         if (evt.getButton() == java.awt.event.MouseEvent.BUTTON1){
-        if (carter.getWeaponName().equals("Assault Rifle")) {
-            // Continuous shooting for Assault Rifle
-            isShooting = true;
-        } else if (carter.getWeaponName().equals("Pistol")) {
-            // Single shot for Pistol on mouse press
-            carter.shoot(); // Call shoot once for Pistol
-        }
+            if (carter.getWeaponName().equals("Assault Rifle")) {
+                // Continuous shooting for Assault Rifle
+                isShooting = true;
+            } else if (carter.getWeaponName().equals("Pistol")) {
+                // Single shot for Pistol on mouse press
+                carter.shoot(); // Call shoot once for Pistol
+            }
         }
     }//GEN-LAST:event_panDrawMousePressed
 
@@ -412,6 +430,7 @@ public class Main extends javax.swing.JFrame {
     }    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel ammocount;
     private static javax.swing.JPanel panDraw;
     // End of variables declaration//GEN-END:variables
 }

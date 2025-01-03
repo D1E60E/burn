@@ -19,7 +19,7 @@ public class Player {
     private Weapon currentWeapon;
     private int weaponIndex = 0;
     private final Weapon[] weapons;
-    Rectangle2D hitboxdraw ;
+    Rectangle2D hitboxdraw;
 
 
     public Player() {
@@ -55,6 +55,9 @@ public class Player {
     }
     public Weapon getCurrentWeapon(){
         return currentWeapon;
+    }
+    public int getAmmo(){
+        return currentWeapon.getcount();
     }
    
     public void updateDirection(int mouseX, int mouseY){
