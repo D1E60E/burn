@@ -39,13 +39,15 @@ public class Main extends javax.swing.JFrame {
     static ArrayList<Wall> walls = new ArrayList<>();
     static ArrayList<Enemy> enemies = new ArrayList<>();
     Image scaled;
+    Image scaledPistol;
+    Image scaledAR;
     
     
     
     
     //DEVELOPER VARIABLES
-    private boolean showWalls = false; // Toggle visibility of walls for testing
-    private boolean editMode = true; //Toggle edit mode for world building
+    private boolean showWalls = true; // Toggle visibility of walls for testing
+    private boolean editMode = false; //Toggle edit mode for world building
     
     
     
@@ -60,7 +62,9 @@ public class Main extends javax.swing.JFrame {
             pistolImg = ImageIO.read(new File("src/burngame/icons/pistol.png"));
             arImg = ImageIO.read(new File("src/burngame/icons/rifle.png"));
             scaled = testBackground.getScaledInstance(2250, 2250, Image.SCALE_DEFAULT);
-            weaponImg = pistolImg;
+            scaledAR = arImg.getScaledInstance(200, 200, Image.SCALE_DEFAULT);
+            scaledPistol = pistolImg.getScaledInstance(200, 200, Image.SCALE_DEFAULT);
+            weaponImg = scaledPistol;
         } catch (IOException ex) {
             System.out.println("Crosshair Image Failed");
         }
@@ -173,27 +177,27 @@ public class Main extends javax.swing.JFrame {
      
      //LIST OF WALLS, ADD ANY WALLS OVER HERE (x,y,width,height,is it hard wall?)Please use the wall maker to auto generate the wall
      private void initWalls(){
-addWall(1126,275,808,265,true);
-addWall(1048,2235,503,15,true);
-addWall(1552,1827,698,422,true);
-addWall(-1,1805,1048,445,true);
-addWall(-1,1538,14,267,true);
-addWall(-1,1265,1048,275,true);
-addWall(0,1,14,1262,true);
-addWall(14,1,2236,14,true);
-addWall(2237,15,13,1426,true);
-addWall(1895,1441,356,119,true);
-addWall(2245,1560,4,268,true);
-addWall(2025,941,211,221,true);
-addWall(2052,631,182,191,true);
-addWall(489,873,15,391,true);
-addWall(489,1,15,740,true);
-addWall(85,91,305,191,true);
-addWall(-2,1238,15,32,true);
- addWall(1611,153,260,120,false);
-addWall(544,1144,261,121,false);
-addWall(2029,1562,223,266,false);    
-addWall(503,1145,39,118,false);
+        addWall(1126,275,808,265,true);
+        addWall(1048,2235,503,15,true);
+        addWall(1552,1827,698,422,true);
+        addWall(-1,1805,1048,445,true);
+        addWall(-1,1538,14,267,true);
+        addWall(-1,1265,1048,275,true);
+        addWall(0,1,14,1262,true);
+        addWall(14,1,2236,14,true);
+        addWall(2237,15,13,1426,true);
+        addWall(1895,1441,356,119,true);
+        addWall(2245,1560,4,268,true);
+        addWall(2025,941,211,221,true);
+        addWall(2052,631,182,191,true);
+        addWall(489,873,15,391,true);
+        addWall(489,1,15,740,true);
+        addWall(85,91,305,191,true);
+        addWall(-2,1238,15,32,true);
+         addWall(1611,153,260,120,false);
+        addWall(544,1144,261,121,false);
+        addWall(2029,1562,223,266,false);    
+        addWall(503,1145,39,118,false);
      }
      private void initEnemies(){
          addEnemy(800,500,"AR");
@@ -313,8 +317,8 @@ addWall(503,1145,39,118,false);
     private void panDrawMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_panDrawMouseWheelMoved
         int direction = evt.getWheelRotation() > 0 ? 1 : -1;
         carter.switchWeapon(direction);
-        if (carter.getWeaponName().equals("Pistol")) weaponImg = pistolImg;
-        else if (carter.getWeaponName().equals("Assault Rifle")) weaponImg = arImg;
+        if (carter.getWeaponName().equals("Pistol")) weaponImg = scaledPistol;
+        else if (carter.getWeaponName().equals("Assault Rifle")) weaponImg = scaledAR;
     }//GEN-LAST:event_panDrawMouseWheelMoved
 
     private void panDrawMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panDrawMousePressed
@@ -372,7 +376,7 @@ addWall(503,1145,39,118,false);
         spark.draw(g);
     }
     
-    g.drawImage(weaponImg, 1750, 50, null);
+    g.drawImage(weaponImg, 1600, 0, null);
 }
     /**
      * @param args the command line arguments

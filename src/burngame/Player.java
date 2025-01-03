@@ -19,7 +19,7 @@ public class Player {
     private Weapon currentWeapon;
     private int weaponIndex = 0;
     private final Weapon[] weapons;
-    //Rectangle2D hitboxdraw ;
+    Rectangle2D hitboxdraw ;
 
 
     public Player() {
@@ -63,7 +63,7 @@ public class Player {
         
     }
     public void draw(Graphics g) {
-              x -= img.getWidth(null)/2;
+        x -= img.getWidth(null)/2;
         y -= img.getHeight(null)/2;
         updateDirection(Main.mouseX,Main.mouseY);
         Graphics2D g2d = (Graphics2D) g;
@@ -83,7 +83,7 @@ public class Player {
 
         // Restore the original transform
         g2d.setTransform(oldTransform);
-       // g2d.draw(hitboxdraw);
+        g2d.draw(hitboxdraw);
     }
     
    public Rectangle2D getRotatedHitbox() {
@@ -93,7 +93,7 @@ public class Player {
         
         // Rotate the rectangle around its center
         AffineTransform transform = AffineTransform.getRotateInstance(angle, 960, 540);
-      //  hitboxdraw = transform.createTransformedShape(rect).getBounds2D();
+        hitboxdraw = transform.createTransformedShape(rect).getBounds2D();
         return transform.createTransformedShape(rect).getBounds2D();
     }
     
