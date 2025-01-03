@@ -12,11 +12,13 @@ public class Enemy {
     private int health;
     private int worldX, worldY; // Enemy's position in the world
     private Image enemyImage;
+    public Weapon weapon;
 
-    public Enemy(int worldX, int worldY, String type) {
+    public Enemy(int worldX, int worldY, String type, String weaponName) {
         this.worldX = worldX;
         this.worldY = worldY;
         this.health = 30; // Default health
+        this.weapon = new Weapon(weaponName);
 
         // Load the enemy image
         try {

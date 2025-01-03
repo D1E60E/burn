@@ -202,7 +202,7 @@ addWall(503,1145,39,118,false);
          walls.add(new Wall(x,y,width,height,bool));
      }
      private void addEnemy(int x, int y, String image){
-         enemies.add(new Enemy(x,y,("src/burngame/icons/"+image+".png")));
+         enemies.add(new Enemy(x,y,("src/burngame/icons/"+image+".png"),"Pistol"));
      }
      
      

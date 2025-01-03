@@ -15,20 +15,27 @@ import javax.imageio.ImageIO;
 public class Weapon {
     private String name;
     private int damage;
-    private int fireRate; // Bullets per second
+    int fireRate; // Bullets per second
     private boolean automatic; // True for automatic weapons (AR), false for semi-automatic (Pistol)
-    private Image sparkImage;
-
-    
-
+    Image sparkImage;
+    String sparkPath = "src/burngame/icons/spark.png";
+    int clip;
+    boolean reloading = false;    
     private long lastShotTime = 0;
 
-    public Weapon(String name, int damage, int fireRate, boolean automatic, String sparkPath) {
+    public Weapon(String name) {
         this.name = name;
-        this.damage = damage;
-        this.fireRate = fireRate;
-        this.automatic = automatic;
-
+        if (name.equals("Pistol")){
+        this.damage = 10;
+        this.fireRate = 5;
+        this.automatic = false;
+        this.clip = 2000000000;
+        }else if (name.equals("Assault Rifle")){
+             this.damage = 10;
+            this.fireRate = 10;
+            this.automatic = true;
+            this.clip = 30;
+        }
         try {
             sparkImage = ImageIO.read(new File(sparkPath));
         } catch (IOException ex) {
@@ -37,35 +44,50 @@ public class Weapon {
     }
 
     public boolean canShoot() {
+        if (clip<=0){
+            reloading = true;
+            clip = 30;
+            return false;     
+        }
         long currentTime = System.currentTimeMillis();
+        if (reloading){
+         if (currentTime - lastShotTime >= 3500){
+             reloading = false;
+             return true;
+         }else{
+             return false;
+         }
+        }else{
         if (currentTime - lastShotTime >= 1000 / fireRate) {
             lastShotTime = currentTime;
             return true;
         }
         return false;
+        }
     }
+  
+    
     public String getName() {
         return name;
     }
-    public boolean isAutomatic() {
+  
+   
+   public boolean isAutomatic() {
     return automatic;
 }
     
     
-public void shoot(int mouseX, int mouseY) {
+public void shoot(int x, int y, int startX, int startY, boolean enemy) {
     if (!canShoot()) return;
-
-    // Player's position is always the center of the screen
-    int startX = 1920 / 2;
-    int startY = 1080 / 2;
-
-    // Adjust mouse position to world coordinates
-    int adjustedMouseX = mouseX + Main.worldX;
-    int adjustedMouseY = mouseY + Main.worldY;
+    clip--;
+    System.out.println(clip);
+    // Adjust position to world coordinates
+    int adjustedX = x + Main.worldX;
+    int adjustedY = y + Main.worldY;
 
     // Calculate direction vector from the player to the adjusted mouse position
-    double directionX = adjustedMouseX - (startX + Main.worldX);
-    double directionY = adjustedMouseY - (startY + Main.worldY);
+    double directionX = adjustedX - (startX + Main.worldX);
+    double directionY = adjustedY - (startY + Main.worldY);
 
     // Normalize the direction vector
     double length = Math.sqrt(directionX * directionX + directionY * directionY);
@@ -95,10 +117,8 @@ public void shoot(int mouseX, int mouseY) {
                 closestDistance = distance;
                 sparkX = (int) intersection.getX();
                 sparkY = (int) intersection.getY();
-            }
-        }
-             }
-    }
+            
+        }}}}
 
     // If there was a valid intersection, create a spark at that position
     if (sparkX != -1 && sparkY != -1) {

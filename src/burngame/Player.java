@@ -19,7 +19,7 @@ public class Player {
     private Weapon currentWeapon;
     private int weaponIndex = 0;
     private final Weapon[] weapons;
-    Rectangle2D nigga ;
+    //Rectangle2D hitboxdraw ;
 
 
     public Player() {
@@ -31,8 +31,8 @@ public class Player {
             System.out.println("Image Failed to Load");
         }
         weapons = new Weapon[] {
-            new Weapon("Pistol", 10, 5, false, "src/burngame/icons/spark.png"),
-            new Weapon("Assault Rifle", 10, 10, true, "src/burngame/icons/spark.png")
+            new Weapon("Pistol"),
+            new Weapon("Assault Rifle")
         };
         currentWeapon = weapons[weaponIndex];
 
@@ -44,7 +44,7 @@ public class Player {
 
    public void shoot() {
     if (currentWeapon != null) {
-        currentWeapon.shoot(Main.mouseX, Main.mouseY);
+        currentWeapon.shoot(Main.mouseX, Main.mouseY, 960, 540, false);
     }
 }
 
@@ -83,17 +83,17 @@ public class Player {
 
         // Restore the original transform
         g2d.setTransform(oldTransform);
-
+       // g2d.draw(hitboxdraw);
     }
     
    public Rectangle2D getRotatedHitbox() {
 
         // Create the unrotated rectangle centered at (960, 540)
         Rectangle2D rect = new Rectangle2D.Double(960 - 100 / 2, 540 - 33 / 2, 100, 33);
-
+        
         // Rotate the rectangle around its center
         AffineTransform transform = AffineTransform.getRotateInstance(angle, 960, 540);
-        
+      //  hitboxdraw = transform.createTransformedShape(rect).getBounds2D();
         return transform.createTransformedShape(rect).getBounds2D();
     }
     
